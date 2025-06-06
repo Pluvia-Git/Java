@@ -4,9 +4,10 @@ import br.com.fiap.pluvia.dto.EnderecoDTO;
 import br.com.fiap.pluvia.dto.UsuarioDTO;
 import br.com.fiap.pluvia.models.Endereco;
 import br.com.fiap.pluvia.models.Usuario;
-import br.com.fiap.pluvia.repositories.EnderecoRepository;
 import br.com.fiap.pluvia.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    //Login
     public Usuario registro(String email, String senha) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos"));
@@ -45,5 +47,24 @@ public class UsuarioService {
 
         return usuario;
     }
+
+    public Usuario buscarPeloEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuário não identificado."));
+    }
+
+    public Page<Usuario> listarPaginado(int pagina, int tamanho) {
+        return usuarioRepository.findAll(PageRequest.of(pagina, tamanho));
+    }
+
+    public void deletar(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuário não encontrado."
+                ));
+        usuarioRepository.delete(usuario);
+    }
+
 
 }
