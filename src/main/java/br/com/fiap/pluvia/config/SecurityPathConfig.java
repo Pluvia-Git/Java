@@ -23,8 +23,7 @@ public class SecurityPathConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/usuarios", "/usuarios/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // Permite tudo
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(httpBasic -> {});
