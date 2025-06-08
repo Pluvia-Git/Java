@@ -20,22 +20,25 @@ public class SecurityPathConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/usuarios", "/usuarios/cadastro", "/usuarios/registro", "/usuarios/{email}").permitAll()
+                        .requestMatchers("/usuarios", "/usuarios/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(httpBasic -> {}) // nova forma correta, mesmo sem personalização
-                .build();
+                .httpBasic(httpBasic -> {});
+
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User
                 .withUsername("admin")
-                .password("{noop}123456") // {noop} = sem codificação de senha
+                .password("{noop}123456")
                 .roles("ADMIN")
                 .build();
 

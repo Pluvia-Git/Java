@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    build: ./oracle-db
+    container_name: oracle-db
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    environment:
+      - ORACLE_PWD=123456
+    healthcheck:
+      test: ["CMD-SHELL", "ls /opt/oracle"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  app-java:
+    build: .
+    container_name: app-java
+    ports:
+      - "8080:8080"
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      - DB_USER=crud
+      - DB_PASS=crud123
+      - DB_HOST=oracle-db
+      - DB_PORT=1521
+      - DB_SERVICE=XEPDB1

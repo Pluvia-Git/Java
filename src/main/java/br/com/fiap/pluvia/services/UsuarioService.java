@@ -8,6 +8,8 @@ import br.com.fiap.pluvia.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,16 @@ public class UsuarioService {
     }
 
     public Page<Usuario> listarPaginado(int pagina, int tamanho) {
-        return usuarioRepository.findAll(PageRequest.of(pagina, tamanho));
+        if (pagina < 0) {
+            pagina = 0;
+        }
+        if (tamanho <= 0) {
+            tamanho = 10;
+        }
+
+        Pageable pageable = PageRequest.of(pagina, tamanho, Sort.by("idUsuario").ascending());
+
+        return usuarioRepository.findAll(pageable);
     }
 
     public void deletar(String email) {

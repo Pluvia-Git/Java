@@ -31,8 +31,8 @@ public class UsuarioController {
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class).findByEmail(null))
                 .withRel("encontrar--usuário-por-email"));
 
-//        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class).listarUsuarios())
-//                .withRel("paginação-usuários"));
+        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class).listarUsuarios(0, 10))
+                .withRel("paginação-usuários"));
 
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class).cadastrar(null))
                 .withRel("cadastrar-usuário"));
