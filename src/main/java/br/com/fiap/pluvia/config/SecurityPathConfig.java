@@ -23,7 +23,8 @@ public class SecurityPathConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Permite tudo
+                        .requestMatchers("/usuarios/**").permitAll()
+                        .anyRequest().authenticated()               
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(httpBasic -> {});
@@ -32,6 +33,7 @@ public class SecurityPathConfig {
 
         return http.build();
     }
+
 
     @Bean
     public UserDetailsService userDetailsService() {
