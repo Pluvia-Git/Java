@@ -1,18 +1,16 @@
 FROM container-registry.oracle.com/database/express:21.3.0-xe
 
-RUN useradd -ms /bin/bash oracledocker
+# Usa o usuário padrão da imagem (oracle)
+USER oracle
 
-WORKDIR /home/oracledocker
+# Define o diretório de trabalho (recomendado, opcional)
+WORKDIR /opt/oracle
 
+# Define senha do Oracle (repetido, mas mantém por clareza)
 ENV ORACLE_PWD=123456
 
-COPY init.sql /home/oracledocker/
-COPY entrypoint.sh /home/oracledocker/
+# Copia o script SQL de inicialização
+COPY init.sql /opt/oracle/scripts/startup/init.sql
 
-RUN chmod +x /home/oracledocker/entrypoint.sh
-
+# Expõe as portas padrão do Oracle XE
 EXPOSE 1521 5500
-
-USER oracledocker
-
-ENTRYPOINT ["/home/oracledocker/entrypoint.sh"]
