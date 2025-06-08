@@ -7,7 +7,7 @@ RUN useradd -ms /bin/bash appuser
 WORKDIR /home/appuser/app
 
 # Copiar JAR final para o container
-COPY target/pluvia-1.0.jar app.jar
+COPY target/pluvia-0.0.1-SNAPSHOT.jar app.jar
 
 # Requisito 3: Variáveis de ambiente (recebidas do docker-compose)
 ENV DB_USER=crud
